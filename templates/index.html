@@ -1,0 +1,136 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="{% static 'img/logo.png' %}" type="image/png" rel="icon">
+
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" type="text/css" rel="stylesheet">
+    <link href="{% static 'DataTables/datatables.min.css' %}" type="text/css" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" type="text/css" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap" rel="stylesheet">
+
+    <title>Министерство сельского хозяйства Забайкальского края</title>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="col-12">
+                <a href="{% url 'index' %}" title="На главную">
+                    <div class="logo">
+                        <img src="{% static 'img/logo.png' %}">
+                        <h2>Министерство сельского хозяйства Забайкальского края</h2>
+                    </div>
+                </a>
+                <a href="{% url 'exit' %}" title="Выйти">
+                    <h3>Выйти</h3>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    {% block content %}
+
+    <section class="main">
+        <div class="container">
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-9">
+                        <h1 class="header">Паспорта проектов</h1>
+                    </div>
+                    <div class="col-3">
+                        <a href="{% url 'passport_add_first' %}">
+                            <button type="submit" style="margin: 0;">Добавить паспорт проекта</button>
+                        </a>
+                    </div>
+                </div>
+                <div class="projects">
+                    <table id="projects" class="hover" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th style="width: 45%;">Наименование проекта</th>
+                                <th style="width: 15%;">Планируемая дата начала реализации проекта</th>
+                                <th style="width: 15%;">Планируемая дата окончания реализации проекта</th>
+                                <th>Общие расходы по проекту</th>
+                                <th data-orderable="false" style="min-width: 100px;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for passport in passports %}
+                            <tr>
+                                <td>{{ passport.nameProject }}</td>
+                                <td>{{ passport.dateStartPlane }}</td>
+                                <td>{{ passport.dateEndPlane }}</td>
+                                <td>{{ passport.generalCost }}</td>
+                                <td>
+                                    <a href="{% url 'passport' passport.id %}">Открыть</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% endblock content %}
+
+    <footer>
+        <div class="line"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-3">
+                    <img src="{% static 'img/logo.png' %}">
+                    <h3>Министерство сельского хозяйства Забайкальского края</h3>
+                </div>
+                <div class="col-4 offset-1">
+                    <h3>Полезные ссылки</h3>
+                    <ul>
+                        <li><a href="https://mcx.75.ru/" target="_blank">Официальный сайт Минсельхоз Забайкальского края</a></li>
+                        <li><a href="https://mcx.75.ru/dokumenty" target="_blank">Поиск документов</a></li>
+                        <li><a href="https://75.ru/" target="_blank">Портал Забайкальского края</a></li>
+                        <li><a href="https://www.gosuslugi.ru/" target="_blank">Портал государственных услуг</a></li>
+                    </ul>
+                </div>
+                <div class="col-3 offset-1">
+                    <h3>Контакты</h3>
+                    <ul>
+                        <li>Российская Федерация, 672010, г. Чита, ул. Амурская, 13</li>
+                        <li>8 (3022) 36-48-82</li>
+                        <li><a href="mailto:pochta@mcx.e-zab.ru" title="Написать письмо">pochta@mcx.e-zab.ru</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <section class="copyright"> 
+		<div class="container">
+            <p>&copy; 2025 <a href="https://github.com/yongsatur" target="_blank" title="Перейти на GitHub разработчика">
+                <strong>YONGSATUR</strong></a>. All Rights Reserved.
+            </p>
+        </div>
+	</section>
+
+    <div id="snackbar"></div>
+
+    <script src="{% static 'js/jquery-3.7.1.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}" type="text/javascript"></script>
+    
+    {% block scripts %}
+
+    <script src="{% static 'DataTables/datatables.min.js' %}" type="text/javascript"></script>
+    <script> var languageRU = "{% static 'DataTables/ru.json' %}"; </script>
+    <script src="{% static 'js/table.js' %}" type="text/javascript"></script>
+
+    {% endblock scripts %}
+
+</body>
+</html>

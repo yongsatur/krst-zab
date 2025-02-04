@@ -1,0 +1,66 @@
+{% extends "admin/change_form.html" %}
+
+{% block extrahead %}
+
+{{ block.super }}
+
+<style type="text/css">
+
+    body {
+        font-family: 'Lucida Sans Unicode', sans-serif;
+        color: #303030;
+    }
+
+    .flex-container {   
+        align-items: center;
+    }
+
+    form .form-row p {
+        padding: 5px 0;
+    }
+
+    .submit-row input.default {
+        text-transform: none;
+    }
+
+    .form-row input:not([type]), .form-row input[type=text], .form-row input[type=password], 
+    .form-row input[type=email], .form-row input[type=url], .form-row input[type=tel], 
+    .form-row input[type=number], .form-row textarea, .form-row select, .form-row 
+    .vTextField, .colM .aligned .vLargeTextField, .colM .aligned .vXMLLargeTextField
+    { 
+        width: 100%;
+    }
+
+    .aligned .vCheckboxLabel {
+        padding: 0 0 0 5px;
+        width: auto!important;
+    }
+
+    .colM .aligned .vLargeTextField, .colM .aligned .vXMLLargeTextField {
+        height: 70px;
+        resize: vertical;
+    }
+
+    .aligned label + p, .aligned .checkbox-row + div.help, .aligned label + div.readonly {
+        display: flex;
+    }
+
+    .datetimeshortcuts {
+        display: flex;
+    }
+
+    .datetimeshortcuts a {
+        margin: 0 7px;
+    }
+
+    fieldset .fieldset-heading, fieldset .inline-heading, :not(.inline-related) .collapse summary {
+        border: none;
+        background-color: #777;
+        border-radius: 5px;
+        padding: 10px 15px;
+        text-transform: uppercase;
+    }
+
+</style>
+
+{% endblock %}

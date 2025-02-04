@@ -1,0 +1,389 @@
+body {
+    font-family: "Roboto Flex", serif;
+    color: #303030;
+}
+
+h1 {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 0 35px 0;
+    text-align: center;
+}
+h1.header {
+    font-size: 25px;
+    color: #8F2F73;
+    text-align: left;
+}
+h2 {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0;
+}
+h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 25px 0;
+    color: #303030;
+}
+h4 {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+    color: #aaa;
+}
+p {
+    margin: 10px 0 0 0;
+}
+a {
+    color: #303030;
+    text-decoration: none;
+}
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    position: sticky;
+    top: 15px;
+}
+
+button {
+    width: 100%;
+    height: 45px;
+	border-radius: 5px;
+	font-size: 16px;
+    color: #fefefe;
+    font-weight: 500;
+	background-color: #303030;
+	border: none;
+}
+button:hover {
+	cursor: pointer;
+    background-color: #8F2F73;
+}
+
+svg {
+    display: flex;
+    justify-self: end;
+    color: #303030;
+}
+svg:hover {
+    color: #8F2F73;
+    cursor: pointer;
+}
+
+.align_end {
+    align-self: flex-end;
+}
+.thin {
+    font-weight: 400;
+}
+.left {
+    text-align: left;
+}
+
+/* Стили для форм */
+
+form input, form textarea, form select {
+    margin: 15px 0;
+}
+form button {
+    margin-top: 30px;
+}
+form svg {
+    margin-top: 30px;
+}
+
+input, textarea, select {
+    display: block;
+    width: 100%;
+    font-size: 16px;
+    height: 45px;
+    padding: 0 15px;
+    border-radius: 5px;
+    border: 1px solid #303030;
+    background-color: #fefefe;
+}
+textarea {
+    height: auto;
+    padding: 10px 15px;
+    resize: vertical;
+}
+input[type="checkbox"] {
+    height: 20px;
+    width: 20px;
+    margin-right: 15px;
+    accent-color: #8F2F73; 
+}
+input[type="text"]:hover, input[type="date"]:hover, 
+input[type="search"]:hover, input[type="password"]:hover, 
+input[type="number"]:hover, textarea:hover, select:hover, 
+input[type="text"]:focus, input[type="date"]:focus, 
+input[type="search"]:focus, input[type="password"]:focus, 
+input[type="number"]:focus, textarea:focus, select:focus, 
+input[type="text"]:active, input[type="date"]:active, 
+input[type="search"]:active, input[type="password"]:focus, 
+input[type="number"]:focus, textarea:active, select:active  {
+    outline: none;
+    box-shadow: none;
+    border-color: #8F2F73;
+}
+input.static {
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #303030;
+    border-radius: 0;
+    text-align: right;
+}
+input.static:hover, input.static:focus, input.static:active {
+    border-color: #303030;
+}
+select:hover {
+    cursor: pointer;
+}
+.checkbox {
+    align-items: center;
+    padding-bottom: 15px;
+}
+
+.messages {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+/* Стили для блоков */
+
+header {
+    border-bottom: solid 1px #ddd;
+    box-shadow: 0 2px 3px #ddd;
+}
+header h3 {
+    margin: 0;
+}
+header h3:hover {
+    color: #8F2F73;
+}
+header .col-12 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+}
+header img {
+    height: 50px;
+    width: auto;
+    margin-right: 25px;
+}
+header .logo {
+    display: flex;
+    align-items: center;
+}
+
+.main {
+    padding: 50px 0 70px 0;
+}
+
+.tab_header_item {
+    padding: 15px 30px;
+    cursor: pointer;
+    color: #aaa;
+    font-weight: 500;
+    border: 1px solid transparent;
+    margin-bottom: 10px;
+}
+.tab_header_item:last-child {
+    margin-bottom: 0;
+}
+.tab_header_item:hover {
+    background-color: #fafafa;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+.tab_header_item.active, .tab_header_item.active:hover {
+    color: #fefefe;
+    background-color: #8F2F73;
+    border: 1px solid #8F2F73;
+    border-radius: 5px;
+}
+.tab_content_item {
+    display: none;
+    padding: 50px;
+    background: #fafafa;
+    border: solid 1px #ddd;
+    border-radius: 5px;
+}
+.tab_content_item.active {
+    display: block;
+}
+
+table {
+    border: 1px solid #303030;
+    border-collapse: separate;
+    border-spacing: 0px;
+    border-radius: 5px;
+    background-color: #fefefe;
+    font-size: 14px;
+}
+table th {
+    text-align: center;
+}
+table th, table td {
+    padding: 10px 15px;
+    border-bottom: 1px solid #303030;
+    border-right: 1px solid #303030;
+}
+table th, table td {
+    word-wrap: break-word;
+    word-break: break-word;
+}
+table th:last-child, table td:last-child {
+    border-right: 0px;
+}
+table tr:last-child td {
+    border-bottom: 0px;
+}
+
+.projects nav {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+.projects label {
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
+}
+.projects .dt-search {
+    display: flex;
+    margin-bottom: 15px;
+}
+.projects button {
+    width: auto;
+    height: auto;
+}
+.projects a {
+    font-weight: 700;
+    text-decoration: underline;
+}
+.projects a:hover {
+    color: #8F2F73;
+}
+
+.project {
+    padding-top: 15px;
+}
+.project h1 {
+    padding-top: 20px;
+}
+.project table {
+    margin: 0 0 15px 0;
+}
+.project a button {
+    margin-top: 30px;
+}
+
+.login {
+    padding: 150px 0;
+    align-content: center;
+}
+.login form button {
+    width: 100%;
+}
+
+footer {
+    background: #303030;
+    color: #fefefe;
+}
+footer .container {
+    padding: 25px 0 50px 0;
+}
+footer .line {
+    background: #282828;
+    padding-top: 25px;
+}
+footer h3 {
+    color: #fefefe;
+}
+footer a {
+    color: #fefefe;
+}
+footer a:hover {
+    color: #8F2F73;
+}
+footer ul li {
+    padding: 2.5px 0;
+}
+footer img {
+    height: 70px;
+    width: auto;
+    margin: 25px 0 0 0;
+}
+
+.copyright {
+    background: #f2f2ef;
+    text-align: center;
+    padding: 15px 0;
+}
+.copyright p {
+    font-size: 11px;
+    margin: 0;
+}
+.copyright p a {
+    font-size: 12px;
+}
+.copyright p a strong:hover {
+    color: #8F2F73;
+}
+
+#snackbar {
+    visibility: hidden;
+    background-color: #303030;
+    color: #fefefe;
+    text-align: center;
+    border-radius: 5px;
+    padding: 15px 50px;
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    font-size: 14px;
+    font-weight: 600;
+}
+#snackbar.show {
+    visibility: visible;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 3.5s;
+    animation: fadein 0.5s, fadeout 0.5s 3.5s;
+}
+@-webkit-keyframes fadein {
+    from {top: 0; opacity: 0;} 
+    to {top: 10px; opacity: 1;}
+}
+@keyframes fadein {
+    from {top: 0; opacity: 0;}
+    to {top: 10px; opacity: 1;}
+}
+@-webkit-keyframes fadeout {
+    from {top: 10px; opacity: 1;} 
+    to {top: 0; opacity: 0;}
+}
+@keyframes fadeout {
+    from {top: 10px; opacity: 1;}
+    to {top: 0; opacity: 0;}
+}
+
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+	-webkit-appearance:none;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none; 
+}
+input[type='number'],
+input[type="number"]:hover,
+input[type="number"]:focus {
+    appearance: none;
+    -moz-appearance: textfield;
+}

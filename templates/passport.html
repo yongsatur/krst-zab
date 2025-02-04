@@ -1,0 +1,491 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block content %}
+
+<section class="main">
+    <div class="container">
+        <div class="col-12">
+            <h1 class="header">Паспорт проекта</h1>
+            <div class="project">
+                <div class="row">
+                    <div class="col-9">
+                        {% if passport %}
+                        <div class="tab_content_item active">
+                            <h1 id="first">1. Общая характеристика</h1>
+                            <div class="row">
+                                <div class="col-12">
+                                    <table class="data_table">
+                                        <colgroup>
+                                            <col style="width:50%">
+                                            <col style="width:50%">
+                                        </colgroup>
+                                        <tbody>
+                                            <tr>
+                                                <th class="left">Наименование проекта</th>
+                                                <td>{{ passport.nameProject|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left">
+                                                    Количественные показатели (показатель) результатов проекта 
+                                                    по объектам и мероприятиям, включенным в проект
+                                                </th>
+                                                <td>{{ passport.indicators|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left">Адрес или описание местоположения</th>
+                                                <td>{{ passport.address|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left">Приграничная территория</th>
+                                                {% if passport.borderArea %}
+                                                <td>Да</td>
+                                                {% else %}
+                                                <td>Нет</td>
+                                                {% endif %}
+                                            </tr>
+                                            <tr>
+                                                <th class="left">ОКТМО населенного (-ых) пункта (-ов)</th>
+                                                <td>{{ passport.OKTMO|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left">
+                                                    Численность населения на 1 января года подачи заявки в 
+                                                    населенном (-ых) пункте (-ах), в котором реализуется проект, чел.
+                                                </th>
+                                                <td>{{ passport.populationLocality|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left">Благоустраиваемая площадь, на которой реализуется проект, кв.м</th>
+                                                <td>{{ passport.improvedArea|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left">Описание состава инициативной группы</th>
+                                                <td>{{ passport.initiativeGroup|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left">
+                                                    Продолжительность реализации проекта, количество месяцев 
+                                                    (до 31 декабря года, в котором получена субсидия)
+                                                </th>
+                                                <td>{{ passport.countMonth|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left">Планируемая дата начала реализации проекта</th>
+                                                <td>{{ passport.dateStartPlane|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left">Планируемая дата окончания реализации проекта</th>
+                                                <td>{{ passport.dateEndPlane|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left">Общие расходы по проекту, рублей</th>
+                                                <td>{{ passport.generalCost|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left thin">
+                                                    За счет средств государственной поддержки 
+                                                    (федерального бюджета и бюджета Забайкальского края)
+                                                </th>
+                                                <td>{{ passport.stateSupport|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left thin">За счет средств местного бюджета</th>
+                                                <td>{{ passport.localBudget|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left">За счет внебюджетных источников, рублей</th>
+                                                <td>{{ passport.offBudget|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left">Вклад граждан, рублей</th>
+                                                <td>{{ passport.citizen|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left thin">денежными средствами</th>
+                                                <td>{{ passport.citizenMoney|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left thin">трудовым участием</th>
+                                                <td>{{ passport.citizenWork|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left thin">предоставлением помещений</th>
+                                                <td>{{ passport.citizenRooms|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left thin">предоставлением технических средств</th>
+                                                <td>{{ passport.citizenTechnical|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left">
+                                                    Вклад общественных, включая волонтерские, организаций, рублей
+                                                </th>
+                                                <td>{{ passport.publicOrg|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left thin">денежными средствами</th>
+                                                <td>{{ passport.publicOrgMoney|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left thin">трудовым участием</th>
+                                                <td>{{ passport.publicOrgWork|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left thin">предоставлением помещений</th>
+                                                <td>{{ passport.publicOrgRooms|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left thin">предоставлением технических средств</th>
+                                                <td>{{ passport.publicOrgTechnical|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left">
+                                                    Вклад юридических лиц (индивидуальных предпринимателей), рублей
+                                                </th>
+                                                <td>{{ passport.legalEntities|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left thin">денежными средствами</th>
+                                                <td>{{ passport.legalEntitiesMoney|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left thin">трудовым участием</th>
+                                                <td>{{ passport.legalEntitiesWork|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left thin">предоставлением помещений</th>
+                                                <td>{{ passport.legalEntitiesRooms|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left thin" style="border-bottom: 0;">предоставлением технических средств</th>
+                                                <td>{{ passport.legalEntitiesTechnical|default:"-" }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <h1 id="second">2. Расчет трудового участия граждан</h1>
+                            <div class="row">
+                                <div class="col-12">
+                                    {% if laborPart %}
+                                    <table class="data_table">
+                                        <colgroup>
+                                            <col style="width:40%">
+                                        </colgroup>
+                                        <thead>
+                                            <tr>
+                                                <th>Опи&shy;са&shy;ние ра&shy;бот</th>
+                                                <th>Тру&shy;до&shy;вые за&shy;тра&shy;ты, ко&shy;ли&shy;чест&shy;во 
+                                                    че&shy;ло&shy;ве&shy;ко-ча&shy;сов</th>
+                                                <th>Стои&shy;мость од&shy;но&shy;го че&shy;ло&shy;ве&shy;ка-ча&shy;са, 
+                                                    руб&shy;лей</th>
+                                                <th>Стои&shy;мость тру&shy;до&shy;вых зат&shy;рат, руб&shy;лей</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for item in laborPart %}
+                                            <tr>
+                                                <td>{{ item.works|default:"-" }}</td>
+                                                <td>{{ item.countManHour|default:"-" }}</td>
+                                                <td>{{ item.costManHour|default:"-" }}</td>
+                                                <td>{{ item.laborCost|default:"-" }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                            {% for item in totalResults %}
+                                            <tr>
+                                                <th style="border-bottom: none;">Всего:</th>
+                                                <td></td>
+                                                <td></td>
+                                                <td>{{ item.totalLaborCost|default:"-" }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    {% else %}
+                                    <h4>Данных нет</h4>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <h1 id="third">3. Целевая группа</h1>
+                            <div class="row">
+                                <div class="col-12">
+                                    {% if targetGroup %}
+                                    <table class="data_table">
+                                        <colgroup>
+                                            <col style="width:60%">
+                                            <col style="width:40%">
+                                        </colgroup>
+                                        <tbody>
+                                            {% for item in targetGroup %}
+                                            <tr>
+                                                <th class="left">Чис&shy;лен&shy;ность на&shy;се&shy;ле&shy;ния, 
+                                                    про&shy;го&shy;ло&shy;со&shy;вав&shy;ших за про&shy;ект, чел.</th>
+                                                <td>{{ item.populationVoted|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left">
+                                                    Чис&shy;лен&shy;ность на&shy;се&shy;ле&shy;ния, подт&shy;вер&shy;див&shy;ше&shy;го 
+                                                    учас&shy;тие в ре&shy;али&shy;за&shy;ции про&shy;ек&shy;та, чел.
+                                                </th>
+                                                <td>{{ item.populationPart|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left">
+                                                    Ко&shy;ли&shy;чест&shy;во вы&shy;го&shy;до&shy;при&shy;обре&shy;та&shy;те&shy;лей 
+                                                    (жи&shy;те&shy;лей, ко&shy;то&shy;рые по&shy;лу&shy;чат поль&shy;зу от про&shy;ек&shy;та, 
+                                                    поль&shy;зо&shy;ва&shy;те&shy;лей объ&shy;ек&shy;та&shy;ми, соз&shy;дан&shy;ны&shy;ми 
+                                                    (обуст&shy;ро&shy;ен&shy;ны&shy;ми) в рам&shy;ках про&shy;ек&shy;та), чел.
+                                                </th>
+                                                <td>{{ item.countBenefit|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left thin">от 0 до 18 лет</th>
+                                                <td>{{ item.younger|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left thin">от 18 до 35 лет</th>
+                                                <td>{{ item.adult|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left thin" style="border-bottom: 0;">стар&shy;ше 35 лет</th>
+                                                <td>{{ item.older|default:"-" }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    {% else %}
+                                    <h4>Данных нет</h4>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <h1 id="forth">4. Описание проекта</h1>
+                            <div class="row">
+                                <div class="col-12">
+                                    {% if projectDesc %}
+                                    <table class="data_table">
+                                        <colgroup>
+                                            <col style="width:50%">
+                                            <col style="width:50%">
+                                        </colgroup>
+                                        <tbody>
+                                            {% for item in projectDesc %}
+                                            <tr>
+                                                <th class="left">Цель проекта</th>
+                                                <td>{{ item.targetProject|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left">Задачи проекта</th>
+                                                <td>{{ item.tasksProject|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left">
+                                                    Описание мероприятий предпроектного 
+                                                    исследования (в случае его проведения)
+                                                </th>
+                                                <td>{{ item.events|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left">
+                                                    Описание проблемы, на решение которой направлен проект, 
+                                                    с приложением эскизного проекта размещения элементов благоустройства, 
+                                                    карты-схемы расположения объектов благоустройства в населенном пункте
+                                                </th>
+                                                <td>{{ item.troubles|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left">
+                                                    Участие в мероприятиях государственной программы Российской Федерации 
+                                                    «Комплексное развитие сельских территорий», утвержденной постановлением 
+                                                    Правительства Российской Федерации от 31 мая 2019 г. № 696, в течении 
+                                                    3 лет, предшествующих году предоставления субсидии на реализацию проекта
+                                                </th>
+                                                {% if item.stateMainEvents %}
+                                                <td>Да</td>
+                                                {% else %}
+                                                <td>Нет</td>
+                                                {% endif %}
+                                            </tr>
+                                            <tr>
+                                                <th class="left thin">
+                                                    Если да, описываются реализованные мероприятия на территории реализации проекта
+                                                </th>
+                                                <td>{{ item.nameStateMainEvents|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left">
+                                                    Участие в мероприятиях других государственных программ Российской Федерации, 
+                                                    Забайкальского края, муниципальных программ и проектах, в течении 3 лет, 
+                                                    предшествующих году предоставления субсидии на реализацию проекта
+                                                </th>
+                                                {% if item.stateEvents %}
+                                                <td>Да</td>
+                                                {% else %}
+                                                <td>Нет</td>
+                                                {% endif %}
+                                            </tr>
+                                            <tr>
+                                                <th class="left thin">
+                                                    Если да, описываются реализованные мероприятия на территории реализации проекта
+                                                </th>
+                                                <td>{{ item.nameStateEvents|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left">
+                                                    Соответствие нормам безопасности и законодательству Российской Федерации, 
+                                                    включая ссылки на соответствующие нормативы (в случае использования типовой 
+                                                    проектной документации дается информация о ее источнике)
+                                                </th>
+                                                <td>{{ item.security|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left">Качество и обоснованность архитектурных и планировочных решений</th>
+                                                <td>{{ item.justification|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left">Формы проведения процедур по выбору подрядчика либо закупок</th>
+                                                <td>{{ item.forms|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left">Мероприятия по поддержанию и/или развитию 
+                                                    полученных в рамках проекта результатов</th>
+                                                <td>{{ item.supportEvents|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="left" style="border-bottom: 0;">
+                                                    Механизмы содержания и эксплуатации объектов по благоустройству
+                                                </th>
+                                                <td>{{ item.mechanisms|default:"-" }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    {% else %}
+                                    <h4>Данных нет</h4>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <h1 id="fifth">5. План реализации мероприятий проекта</h1>
+                            <div class="row">
+                                <div class="col-12">
+                                    {% if planeEvents %}
+                                    <table class="data_table">
+                                        <colgroup>
+                                            <col style="width:25%">
+                                            <col style="width:30%">
+                                            <col style="width:12.5%">
+                                            <col style="width:12.5%">
+                                            <col style="width:20%">
+                                        </colgroup>
+                                        <thead>
+                                            <tr>
+                                                <th>Вид ра&shy;бот</th>
+                                                <th>Наи&shy;ме&shy;но&shy;ва&shy;ние ме&shy;роп&shy;рия&shy;тия</th>
+                                                <th>Сро&shy;ки реа&shy;ли&shy;за&shy;ции (на&shy;ча&shy;ло)</th>
+                                                <th>Сро&shy;ки реа&shy;ли&shy;за&shy;ции (ко&shy;нец)</th>
+                                                <th>От&shy;ветст&shy;вен&shy;ный ис&shy;пол&shy;ни&shy;тель</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for item in planeEvents %}
+                                            <tr>
+                                                <td>{{ item.typeEvent|default:"-" }}</td>
+                                                <td>{{ item.nameEvent|default:"-" }}</td>
+                                                <td>{{ item.dedlineStart|default:"-" }}</td>
+                                                <td>{{ item.dedlineEnd|default:"-" }}</td>
+                                                <td>{{ item.performer|default:"-" }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    {% else %}
+                                    <h4>Данных нет</h4>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <h1 id="sixth">6. Смета расходов по проекту</h1>
+                            <div class="row">
+                                <div class="col-12">
+                                    {% if costEstimate %}
+                                    <table class="data_table">
+                                        <colgroup>
+                                            <col style="width:25%">
+                                            <col style="width:15%">
+                                            <col style="width:15%">
+                                            <col style="width:15%">
+                                            <col style="width:15%">
+                                            <col style="width:15%">
+                                        </colgroup>
+                                        <thead>
+                                            <tr>
+                                                <th rowspan="3">Ста&shy;тьи рас&shy;хо&shy;дов</th>
+                                                <th rowspan="3">Об&shy;щие рас&shy;хо&shy;ды по про&shy;ек&shy;ту</th>
+                                                <th rowspan="3">За&shy;пра&shy;ши&shy;вае&shy;мые средст&shy;ва 
+                                                    го&shy;су&shy;дарст&shy;вен&shy;ной под&shy;держ&shy;ки</th>
+                                                <th colspan="3">Вклад ини&shy;ци&shy;ато&shy;ра про&shy;ек&shy;та</th>
+                                            </tr>
+                                            <tr>
+                                                <th rowspan="2">Вне&shy;бюд&shy;жет&shy;ные ис&shy;точ&shy;ни&shy;ки</th>
+                                                <th colspan="2">Мест&shy;ный бюд&shy;жет</th>
+                                            </tr>
+                                            <tr>
+                                                <th>Бюд&shy;жет му&shy;ни&shy;ци&shy;паль&shy;но&shy;го 
+                                                    рай&shy;она (му&shy;ни&shy;ци&shy;паль&shy;но&shy;го или 
+                                                    го&shy;род&shy;ско&shy;го ок&shy;ру&shy;га)</th>
+                                                <th style="border-right: 1px;">Бюд&shy;жет сельс&shy;ко&shy;го 
+                                                    (го&shy;род&shy;ско&shy;го) по&shy;се&shy;ле&shy;ния</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for item in costEstimate %}
+                                            <tr>
+                                                <td>{{ item.expenseItem|default:"0" }}</td>
+                                                <td>{{ item.generalExpenses|default:"0" }}</td>
+                                                <td>{{ item.stateExpenses|default:"0" }}</td>
+                                                <td>{{ item.districtBudget|default:"0" }}</td>
+                                                <td>{{ item.settlementBudget|default:"0" }}</td>
+                                                <td>{{ item.offBudgetExpenses|default:"0" }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                            {% for item in totalResults %}
+                                            <tr>
+                                                <th style="border-bottom: none;">Всего:</th>
+                                                <td>{{ item.totalGeneralExpenses|default:"0" }}</td>
+                                                <td>{{ item.totalStateExpenses|default:"0" }}</td>
+                                                <td>{{ item.totalDistrictBudget|default:"0" }}</td>
+                                                <td>{{ item.totalSettlementBudget|default:"0" }}</td>
+                                                <td>{{ item.totalOffBudgetExpenses|default:"0" }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    {% else %}
+                                    <h4>Данных нет</h4>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-3">
+                        <ul>
+                            <a href="#first"><li class="tab_header_item">Общая характеристика</li></a>
+                            <a href="#second"><li class="tab_header_item">Расчет трудового участия</li></a>
+                            <a href="#third"><li class="tab_header_item">Целевая группа</li></a>
+                            <a href="#forth"><li class="tab_header_item">Описание проекта</li></a>
+                            <a href="#fifth"><li class="tab_header_item">План реализации мероприятий</li></a>
+                            <a href="#sixth"><li class="tab_header_item">Смета расходов</li></a>
+                            <li>
+                                <a href="{% url 'export' passport.id %}">
+                                    <button>Экспортировать в .XLSX</button>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}
