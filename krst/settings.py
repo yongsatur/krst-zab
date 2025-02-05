@@ -51,9 +51,13 @@ TEMPLATES = [
 WSGI_APPLICATION = 'krst.wsgi.application'
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": "krst",
+        "USER": "c74551_krst_zab_ru",
+        "PASSWORD": "KaYyoYuzrapuv45",
+        "HOST": "localhost",
+        "PORT": "3306",
     }
 }
 
