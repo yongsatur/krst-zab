@@ -30,40 +30,44 @@ function countBenefit() {
 }
 
 function generalExpenses() {
-    document.getElementById('generalExpenses').value = 
-        Number(document.getElementById('districtBudget').value) + 
+    result = Number(document.getElementById('districtBudget').value) + 
         Number(document.getElementById('stateExpenses').value) + 
         Number(document.getElementById('settlementBudget').value) +
         Number(document.getElementById('offBudgetExpenses').value);
+    document.getElementById('generalExpenses').value = Number(result.toFixed(2));
 }
 
 function generalCost() {
-    document.getElementById('generalCost').value = 
-        Number(document.getElementById('stateSupport').value) + Number(document.getElementById('localBudget').value) + 
+    result = Number(document.getElementById('stateSupport').value) + Number(document.getElementById('localBudget').value) + 
         Number(document.getElementById('citizenMoney').value) + Number(document.getElementById('citizenWork').value) + 
         Number(document.getElementById('citizenRooms').value) + Number(document.getElementById('citizenTechnical').value) +
         Number(document.getElementById('publicOrgMoney').value) + Number(document.getElementById('publicOrgWork').value) + 
         Number(document.getElementById('publicOrgRooms').value) + Number(document.getElementById('publicOrgTechnical').value) +
         Number(document.getElementById('legalEntitiesMoney').value) + Number(document.getElementById('legalEntitiesWork').value) + 
         Number(document.getElementById('legalEntitiesRooms').value) + Number(document.getElementById('legalEntitiesTechnical').value);
+    document.getElementById('generalCost').value = Number(result.toFixed(2));
     
-    document.getElementById('offBudget').value = Number(document.getElementById('citizenMoney').value) + 
+    offBudget = Number(document.getElementById('citizenMoney').value) + 
         Number(document.getElementById('citizenWork').value) + Number(document.getElementById('citizenRooms').value) + 
         Number(document.getElementById('citizenTechnical').value) + Number(document.getElementById('publicOrgMoney').value) + 
         Number(document.getElementById('publicOrgWork').value) + Number(document.getElementById('publicOrgRooms').value) + 
         Number(document.getElementById('publicOrgTechnical').value) + Number(document.getElementById('legalEntitiesMoney').value) + 
         Number(document.getElementById('legalEntitiesWork').value) + Number(document.getElementById('legalEntitiesRooms').value) + 
         Number(document.getElementById('legalEntitiesTechnical').value);
+    document.getElementById('offBudget').value = Number(offBudget.toFixed(2));
     
-    document.getElementById('citizen').value = Number(document.getElementById('citizenMoney').value) + 
+    citizen = Number(document.getElementById('citizenMoney').value) + 
         Number(document.getElementById('citizenWork').value) + Number(document.getElementById('citizenRooms').value) + 
-        Number(document.getElementById('citizenTechnical').value)
+        Number(document.getElementById('citizenTechnical').value);
+    document.getElementById('citizen').value = Number(citizen.toFixed(2));
    
-    document.getElementById('publicOrg').value = Number(document.getElementById('publicOrgMoney').value) + 
+    publicOrg = Number(document.getElementById('publicOrgMoney').value) + 
         Number(document.getElementById('publicOrgWork').value) + Number(document.getElementById('publicOrgRooms').value) + 
         Number(document.getElementById('publicOrgTechnical').value);
+    document.getElementById('publicOrg').value = Number(publicOrg.toFixed(2));
     
-    document.getElementById('legalEntities').value = Number(document.getElementById('legalEntitiesMoney').value) + 
+    legalEntities = Number(document.getElementById('legalEntitiesMoney').value) + 
         Number(document.getElementById('legalEntitiesWork').value) + Number(document.getElementById('legalEntitiesRooms').value) + 
         Number(document.getElementById('legalEntitiesTechnical').value);
+    document.getElementById('legalEntities').value = Number(legalEntities.toFixed(2));
 }
