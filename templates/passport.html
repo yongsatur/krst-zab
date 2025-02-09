@@ -476,6 +476,11 @@
                             <a href="#fifth"><li class="tab_header_item">План реализации мероприятий</li></a>
                             <a href="#sixth"><li class="tab_header_item">Смета расходов</li></a>
                             <li>
+                                <a href="{% url 'passport_update_first' passport.id %}">
+                                    <button>Редактировать</button>
+                                </a>
+                            </li>
+                            <li>
                                 <a href="{% url 'export' passport.id %}">
                                     <button>Экспортировать в .XLSX</button>
                                 </a>

@@ -9,10 +9,10 @@ function switchTab(id) {
     content.addClass('active');
 }
 
-function showSnackbar() {
+function showSnackbar(message) {
     var snackbar = document.getElementById("snackbar");
     snackbar.className = "show";
-    snackbar.innerText = "Данные были успешно отправлены!";
+    snackbar.innerText = message;
     setTimeout(function(){ 
         snackbar.className = snackbar.className.replace("show", "");
     }, 4000);

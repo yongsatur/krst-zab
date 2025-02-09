@@ -1,5 +1,6 @@
 {% extends "index.html" %}
 {% load static %}
+{% load to_float %}
 
 {% block content %}
 
@@ -8,17 +9,244 @@
         <div class="row">
             <div class="col-3">
                 <ul class="tab_header">
+                    {% if passport %}
+                    <a href="{% url 'passport_update_first' passport.id %}">
+                        <li class="tab_header_item active" data-tab="1">Общая характеристика</li>
+                    </a>
+                    <a href="{% url 'passport_add_second' passport.id %}">
+                        <li class="tab_header_item" data-tab="2">Расчет трудового участия</li>
+                    </a>
+                    <a href="{% url 'passport_update_third' passport.id %}">
+                        <li class="tab_header_item active" data-tab="3">Целевая группа</li>
+                    </a>
+                    <a href="{% url 'passport_update_forth' passport.id %}">
+                        <li class="tab_header_item active" data-tab="4">Описание проекта</li>
+                    </a>
+                    <a href="{% url 'passport_add_fifth' passport.id %}">
+                        <li class="tab_header_item" data-tab="5">План реализации мероприятий</li>
+                    </a>
+                    <a href="{% url 'passport_add_sixth' passport.id %}">
+                        <li class="tab_header_item" data-tab="6">Смета расходов</li>
+                    </a>
+                    {% else %}
                     <li class="tab_header_item active" data-tab="1">Общая характеристика</li>
                     <li class="tab_header_item" data-tab="2">Расчет трудового участия</li>
                     <li class="tab_header_item" data-tab="3">Целевая группа</li>
                     <li class="tab_header_item" data-tab="4">Описание проекта</li>
                     <li class="tab_header_item" data-tab="5">План реализации мероприятий</li>
                     <li class="tab_header_item" data-tab="6">Смета расходов</li>
+                    {% endif %}
                 </ul>
             </div>
             <ul class="col-9 tab_content">
                 <li class="tab_content_item active" data-tab="1">
                     <h1>1. Общая характеристика</h1>
+                    {% if passport %}
+                    <form method="post" action="{% url 'passport_update_first' passport.id %}">
+                        {% csrf_token %}
+                        <label for="nameProject">Наименование проекта</label>
+                        <input name="nameProject" id="nameProject" type="text" autocomplete="off" value="{{ passport.nameProject }}" required>
+                        <label for="indicators">
+                            Количественные показатели (показатель) результатов проекта по объектам и мероприятиям, 
+                            включенным в проект<sup>1</sup>
+                        </label>
+                        <textarea name="indicators" id="indicators" rows="3" required>{{ passport.indicators }}</textarea>
+                        <label for="address">Адрес или описание местоположения</label>
+                        <textarea name="address" id="address" rows="3" autocomplete="off" required>{{ passport.address }}</textarea>
+                        <div class="row checkbox">
+                            <div class="col-1">
+                                <input name="borderArea" id="borderArea" type="checkbox" {% if passport.borderArea %} checked {% endif %}>
+                            </div>
+                            <div class="col-11">
+                                <label for="borderArea">Приграничная территория (отметьте, если да)</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 align_end">
+                                <label for="OKTMO">ОКТМО населенного (-ых) пункта (-ов)</label>
+                                <input name="OKTMO" id="OKTMO" type="text" autocomplete="off" value="{{ passport.OKTMO }}" required>
+                            </div>
+                            <div class="col-6 align_end">
+                                <label for="improvedArea">
+                                    Благоустраиваемая площадь, на которой реализуется проект, кв.м
+                                </label>
+                                <input name="improvedArea" id="improvedArea" type="number" step="0.01" autocomplete="off" value="{{ passport.improvedArea|to_float_result }}">
+                            </div>
+                            <div class="col-6 align_end">
+                                <label for="populationLocality">
+                                    Численность населения на 1 января года подачи заявки в населенном
+                                    (-ых) пункте (-ах), в котором реализуется проект, чел.<sup>2</sup>
+                                </label>
+                                <input name="populationLocality" id="populationLocality" type="number" autocomplete="off" value="{{ passport.populationLocality }}">
+                            </div>
+                            <div class="col-6 align_end">
+                                <label for="countMonth">
+                                    Продолжительность реализации проекта, количество месяцев
+                                    (до 31 декабря года, в котором получена субсидия) 
+                                </label>
+                                <input name="countMonth" id="countMonth" type="number" autocomplete="off" value="{{ passport.countMonth }}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 align_end">
+                                <label for="dateStartPlane">Планируемая дата начала реализации проекта</label>
+                                <input name="dateStartPlane" id="dateStartPlane" type="date" autocomplete="off" value="{{ passport.dateStartPlane|date:'Y-m-d' }}">
+                            </div>
+                            <div class="col-6 align_end">
+                                <label for="dateEndPlane">Планируемая дата окончания реализации проекта</label>
+                                <input name="dateEndPlane" id="dateEndPlane" type="date" autocomplete="off" value="{{ passport.dateEndPlane|date:'Y-m-d' }}">
+                            </div>
+                        </div>
+                        <label for="initiativeGroup">Описание состава инициативной группы<sup>3</sup></label>
+                        <textarea name="initiativeGroup" id="initiativeGroup" rows="3">{{ passport.initiativeGroup }}</textarea>
+                        <div class="row">
+                            <div class="col-9 align_end">
+                                <h3>Общие расходы по проекту, рублей</h3>
+                            </div>
+                            <div class="col-3 align_end">
+                                <input class="static" name="generalCost" id="generalCost" type="text" value="{{ passport.generalCost|to_float_result }}" readonly>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 align_end">
+                                <label for="stateSupport">
+                                    За счет средств государственной поддержки (федерального бюджета 
+                                    и бюджета Забайкальского края)
+                                </label>
+                                <input name="stateSupport" id="stateSupport" type="number" step="0.001" autocomplete="off" value="{{ passport.stateSupport|to_float }}">
+                            </div>
+                            <div class="col-6 align_end">
+                                <label for="localBudget">За счет средств местного бюджета</label>
+                                <input name="localBudget" id="localBudget" type="number" step="0.001" autocomplete="off" value="{{ passport.localBudget|to_float }}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9 align_end">
+                                <h3>За счет внебюджетных источников, рублей</h3>
+                            </div>
+                            <div class="col-3 align_end">
+                                <input class="static" name="offBudget" id="offBudget" type="text" value="{{ passport.offBudget|to_float_result }}" readonly>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9 align_end">
+                                <h3>Вклад граждан, рублей</h3>
+                            </div>
+                            <div class="col-3 align_end">
+                                <input class="static" name="citizen" id="citizen" type="text" value="{{ passport.citizen|to_float_result }}" readonly>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 align_end">
+                                <label for="citizenMoney">денежными средствами</label>
+                                <input name="citizenMoney" id="citizenMoney" type="number" step="0.001" autocomplete="off" value="{{ passport.citizenMoney|to_float }}">
+                            </div>
+                            <div class="col-6 align_end">
+                                <label for="citizenWork">трудовым участием</label>
+                                <input name="citizenWork" id="citizenWork" type="number" step="0.001" autocomplete="off" value="{{ passport.citizenWork|to_float }}">
+                            </div>
+                            <div class="col-6 align_end">
+                                <label for="citizenRooms">предоставлением помещений</label>
+                                <input name="citizenRooms" id="citizenRooms" type="number" step="0.001" autocomplete="off" value="{{ passport.citizenRooms|to_float }}">
+                            </div>
+                            <div class="col-6 align_end">
+                                <label for="citizenTechnical">предоставлением технических средств</label>
+                                <input name="citizenTechnical" id="citizenTechnical" type="number" step="0.001" autocomplete="off" value="{{ passport.citizenTechnical|to_float }}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9 align_end">
+                                <h3>Вклад общественных, включая волонтерские, организаций, рублей</h3>
+                            </div>
+                            <div class="col-3 align_end">
+                                <input class="static" name="publicOrg" id="publicOrg" type="text" value="{{ passport.publicOrg|to_float_result }}" readonly>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 align_end">
+                                <label for="publicOrgMoney">денежными средствами</label>
+                                <input name="publicOrgMoney" id="publicOrgMoney" type="number" step="0.001" autocomplete="off" value="{{ passport.publicOrgMoney|to_float }}">
+                            </div>
+                            <div class="col-6 align_end">
+                                <label for="publicOrgWork">трудовым участием</label>
+                                <input name="publicOrgWork" id="publicOrgWork" type="number" step="0.001" autocomplete="off" value="{{ passport.publicOrgWork|to_float }}">
+                            </div>
+                            <div class="col-6 align_end">
+                                <label for="publicOrgRooms">предоставлением помещений</label>
+                                <input name="publicOrgRooms" id="publicOrgRooms" type="number" step="0.001" autocomplete="off" value="{{ passport.publicOrgRooms|to_float }}">
+                            </div>
+                            <div class="col-6 align_end">
+                                <label for="publicOrgTechnical">предоставлением технических средств</label>
+                                <input name="publicOrgTechnical" id="publicOrgTechnical" type="number" step="0.001" autocomplete="off" value="{{ passport.publicOrgTechnical|to_float }}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9 align_end">
+                                <h3>Вклад юридических лиц (индивидуальных предпринимателей), рублей</h3>
+                            </div>
+                            <div class="col-3 align_end">
+                                <input class="static" name="legalEntities" id="legalEntities" type="text" value="{{ passport.legalEntities|to_float_result }}" readonly>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 align_end">
+                                <label for="legalEntitiesMoney">денежными средствами</label>
+                                <input name="legalEntitiesMoney" id="legalEntitiesMoney" type="number" step="0.001" autocomplete="off" value="{{ passport.legalEntitiesMoney|to_float }}">
+                            </div>
+                            <div class="col-6 align_end">
+                                <label for="legalEntitiesWork">трудовым участием</label>
+                                <input name="legalEntitiesWork" id="legalEntitiesWork" type="number" step="0.001" autocomplete="off" value="{{ passport.legalEntitiesWork|to_float }}">
+                            </div>
+                            <div class="col-6 align_end">
+                                <label for="legalEntitiesRooms">предоставлением помещений</label>
+                                <input name="legalEntitiesRooms" id="legalEntitiesRooms" type="number" step="0.001" autocomplete="off" value="{{ passport.legalEntitiesRooms|to_float }}">
+                            </div>
+                            <div class="col-6 align_end">
+                                <label for="legalEntitiesTechnical">предоставлением технических средств</label>
+                                <input name="legalEntitiesTechnical" id="legalEntitiesTechnical" type="number" step="0.001" autocomplete="off" value="{{ passport.legalEntitiesTechnical|to_float }}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4 offset-8">
+                                <button type="submit">Изменить</button>
+                            </div>
+                        </div>
+                        <h3>Примечание:</h3>
+                        <p>
+                            <sup>1</sup> Указывается краткое наименование: детская площадка, спортивная площадка, зона отдыха, 
+                            площадка для лиц с ограниченными возможностями здоровья, освещение территории, подсветка зданий, 
+                            пешеходный тротуар, велосипедная дорожка, автомобильная парковка, велосипедная парковка, 
+                            ремонт дороги, ограждение, оформление фасада, ливневый сток, колодец, колонка, площадка 
+                            накопления твердых коммунальных отходов, природный ландшафт, водоем, памятник.
+                        </p>
+                        <p><sup>2</sup> Указывается на основании официальной статистической информации.</p>
+                        <p>
+                            <sup>3</sup> а) население муниципального образования, представители органанов территориального 
+                            общественного самоуправления, общественных организаций и объединений; 
+                            б) хозяйствующие субъекты, осуществляющие деятельность на территории соответствующего муниципального 
+                            образования; 
+                            в) бюджетные учреждения, в том числе в сфере образования, здравоохранения, культуры, 
+                            социальной защиты, физической культуры и спорта, общественные организации и иные некоммерческие 
+                            организации.
+                        </p>
+                        <p>
+                            <sup>4</sup> Сумма средств федерального бюджета и бюджета Забайкальского края не превышает 
+                            3 млн. рублей и составляет не более 70% общего объема финансового обеспечения реализации проекта.
+                        </p>
+                        <p>
+                            <sup>5</sup> Сумма средств бюджетов муниципального района (муниципального или городского округа) 
+                            и сельского (городского) поселения составляет не менее 3% от объема привлекаемых на реализацию 
+                            проекта средств без учета запрашиваемых средств государственной поддержки. При этом, уровень 
+                            софинансирования Забайкальским краем объема расходного обязательства  района (муниципального или 
+                            городского округа) составляет не более 99%.
+                        </p>
+                        <p>
+                            <sup>6</sup> Сумма средств внебюджетных источников составляет разницу от общего объема 
+                            финансового обеспечения реализации проекта суммы средств государственной поддержки 
+                            и местных бюджетов.
+                        </p>
+                    </form>
+                    {% else %}
                     <form method="post" action="{% url 'passport_add_first' %}">
                         {% csrf_token %}
                         <label for="nameProject">Наименование проекта</label>
@@ -47,21 +275,21 @@
                                 <label for="improvedArea">
                                     Благоустраиваемая площадь, на которой реализуется проект, кв.м
                                 </label>
-                                <input name="improvedArea" id="improvedArea" type="number" title="" autocomplete="off">
+                                <input name="improvedArea" id="improvedArea" type="number" step="0.001" autocomplete="off">
                             </div>
                             <div class="col-6 align_end">
                                 <label for="populationLocality">
                                     Численность населения на 1 января года подачи заявки в населенном
                                     (-ых) пункте (-ах), в котором реализуется проект, чел.<sup>2</sup>
                                 </label>
-                                <input name="populationLocality" id="populationLocality" type="number" title="" autocomplete="off">
+                                <input name="populationLocality" id="populationLocality" type="number" autocomplete="off">
                             </div>
                             <div class="col-6 align_end">
                                 <label for="countMonth">
                                     Продолжительность реализации проекта, количество месяцев
                                     (до 31 декабря года, в котором получена субсидия) 
                                 </label>
-                                <input name="countMonth" id="countMonth" type="number" title="" autocomplete="off">
+                                <input name="countMonth" id="countMonth" type="number" autocomplete="off">
                             </div>
                         </div>
                         <div class="row">
@@ -90,11 +318,11 @@
                                     За счет средств государственной поддержки (федерального бюджета 
                                     и бюджета Забайкальского края)
                                 </label>
-                                <input name="stateSupport" id="stateSupport" type="number" title="" autocomplete="off">
+                                <input name="stateSupport" id="stateSupport" type="number" step="0.001" autocomplete="off">
                             </div>
                             <div class="col-6 align_end">
                                 <label for="localBudget">За счет средств местного бюджета</label>
-                                <input name="localBudget" id="localBudget" type="number" title="" autocomplete="off">
+                                <input name="localBudget" id="localBudget" type="number" step="0.001" autocomplete="off">
                             </div>
                         </div>
                         <div class="row">
@@ -116,19 +344,19 @@
                         <div class="row">
                             <div class="col-6 align_end">
                                 <label for="citizenMoney">денежными средствами</label>
-                                <input name="citizenMoney" id="citizenMoney" type="number" title="" autocomplete="off">
+                                <input name="citizenMoney" id="citizenMoney" type="number" step="0.001" autocomplete="off">
                             </div>
                             <div class="col-6 align_end">
                                 <label for="citizenWork">трудовым участием</label>
-                                <input name="citizenWork" id="citizenWork" type="number" title="" autocomplete="off">
+                                <input name="citizenWork" id="citizenWork" type="number" step="0.001" autocomplete="off">
                             </div>
                             <div class="col-6 align_end">
                                 <label for="citizenRooms">предоставлением помещений</label>
-                                <input name="citizenRooms" id="citizenRooms" type="number" title="" autocomplete="off">
+                                <input name="citizenRooms" id="citizenRooms" type="number" step="0.001" autocomplete="off">
                             </div>
                             <div class="col-6 align_end">
                                 <label for="citizenTechnical">предоставлением технических средств</label>
-                                <input name="citizenTechnical" id="citizenTechnical" type="number" title="" autocomplete="off">
+                                <input name="citizenTechnical" id="citizenTechnical" type="number" step="0.001" autocomplete="off">
                             </div>
                         </div>
                         <div class="row">
@@ -142,19 +370,19 @@
                         <div class="row">
                             <div class="col-6 align_end">
                                 <label for="publicOrgMoney">денежными средствами</label>
-                                <input name="publicOrgMoney" id="publicOrgMoney" type="number" title="" autocomplete="off">
+                                <input name="publicOrgMoney" id="publicOrgMoney" type="number" step="0.001" autocomplete="off">
                             </div>
                             <div class="col-6 align_end">
                                 <label for="publicOrgWork">трудовым участием</label>
-                                <input name="publicOrgWork" id="publicOrgWork" type="number" title="" autocomplete="off">
+                                <input name="publicOrgWork" id="publicOrgWork" type="number" step="0.001" autocomplete="off">
                             </div>
                             <div class="col-6 align_end">
                                 <label for="publicOrgRooms">предоставлением помещений</label>
-                                <input name="publicOrgRooms" id="publicOrgRooms" type="number" title="" autocomplete="off">
+                                <input name="publicOrgRooms" id="publicOrgRooms" type="number" step="0.001" autocomplete="off">
                             </div>
                             <div class="col-6 align_end">
                                 <label for="publicOrgTechnical">предоставлением технических средств</label>
-                                <input name="publicOrgTechnical" id="publicOrgTechnical" type="number" title="" autocomplete="off">
+                                <input name="publicOrgTechnical" id="publicOrgTechnical" type="number" step="0.001" autocomplete="off">
                             </div>
                         </div>
                         <div class="row">
@@ -168,19 +396,19 @@
                         <div class="row">
                             <div class="col-6 align_end">
                                 <label for="legalEntitiesMoney">денежными средствами</label>
-                                <input name="legalEntitiesMoney" id="legalEntitiesMoney" type="number" title="" autocomplete="off">
+                                <input name="legalEntitiesMoney" id="legalEntitiesMoney" type="number" step="0.001" autocomplete="off">
                             </div>
                             <div class="col-6 align_end">
                                 <label for="legalEntitiesWork">трудовым участием</label>
-                                <input name="legalEntitiesWork" id="legalEntitiesWork" type="number" title="" autocomplete="off">
+                                <input name="legalEntitiesWork" id="legalEntitiesWork" type="number" step="0.001" autocomplete="off">
                             </div>
                             <div class="col-6 align_end">
                                 <label for="legalEntitiesRooms">предоставлением помещений</label>
-                                <input name="legalEntitiesRooms" id="legalEntitiesRooms" type="number" title="" autocomplete="off">
+                                <input name="legalEntitiesRooms" id="legalEntitiesRooms" type="number" step="0.001" autocomplete="off">
                             </div>
                             <div class="col-6 align_end">
                                 <label for="legalEntitiesTechnical">предоставлением технических средств</label>
-                                <input name="legalEntitiesTechnical" id="legalEntitiesTechnical" type="number" title="" autocomplete="off">
+                                <input name="legalEntitiesTechnical" id="legalEntitiesTechnical" type="number" step="0.001" autocomplete="off">
                             </div>
                         </div>
                         <div class="row">
@@ -223,6 +451,7 @@
                             и местных бюджетов.
                         </p>
                     </form>
+                    {% endif %}
                 </li>
                 <li class="tab_content_item" data-tab="2">
                     <h1>2. Расчет трудового участия граждан</h1>
@@ -237,15 +466,15 @@
                         <div class="row">
                             <div class="col-4 align_end">
                                 <label for="countManHour">Трудовые затраты, количество человеко-часов</label>
-                                <input name="countManHour" id="countManHour" type="number" title="" autocomplete="off">
+                                <input name="countManHour" id="countManHour" type="number" autocomplete="off">
                             </div>
                             <div class="col-4 align_end">
                                 <label for="costManHour">Стоимость одного человека-часа, рублей</label>
-                                <input name="costManHour" id="costManHour" type="number" title="" autocomplete="off">
+                                <input name="costManHour" id="costManHour" type="number" step="0.001" autocomplete="off">
                             </div>
                             <div class="col-4 align_end">
                                 <label for="laborCost">Стоимость трудовых затрат, рублей</label>
-                                <input name="laborCost" id="laborCost" type="number" title="" autocomplete="off">
+                                <input name="laborCost" id="laborCost" type="number" step="0.001" autocomplete="off">
                             </div>
                         </div>
                         <h3>Предварительный просмотр</h3>
@@ -253,6 +482,9 @@
                             <div class="col-12">
                                 {% if laborPart %}
                                 <table class="data_table">
+                                    <colgroup>
+                                        <col style="width:40%">
+                                    </colgroup>
                                     <thead>
                                         <tr>
                                             <th>Опи&shy;са&shy;ние ра&shy;бот</th>
@@ -261,15 +493,26 @@
                                             <th>Стои&shy;мость од&shy;но&shy;го че&shy;ло&shy;ве&shy;ка-ча&shy;са, 
                                                 руб&shy;лей</th>
                                             <th>Стои&shy;мость тру&shy;до&shy;вых зат&shy;рат, руб&shy;лей</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {% for item in laborPart %}
                                         <tr>
-                                            <td>{{ item.works }}</td>
-                                            <td>{{ item.countManHour }}</td>
-                                            <td>{{ item.costManHour }}</td>
-                                            <td>{{ item.laborCost }}</td>
+                                            <td>{{ item.works|default:"-" }}</td>
+                                            <td>{{ item.countManHour|default:"-" }}</td>
+                                            <td>{{ item.costManHour|default:"-" }}</td>
+                                            <td>{{ item.laborCost|default:"0" }}</td>
+                                            <td>
+                                                <a href="{% url 'passport_delete_second' item.id %}" title="Удалить">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 20 20">
+                                                        <path fill="currentColor" fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16a8 8 0 0 0 0 
+                                                        16ZM8.28 7.22a.75.75 0 0 0-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 1 0 1.06 1.06L10 
+                                                        11.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L11.06 10l1.72-1.72a.75.75 0 0 0-1.06-1.06L10 
+                                                        8.94L8.28 7.22Z" clip-rule="evenodd"/>
+                                                    </svg>
+                                                </a>
+                                            </td>
                                         </tr>
                                         {% endfor %}
                                         <tr>
@@ -277,6 +520,7 @@
                                             <td></td>
                                             <td></td>
                                             <td>{{ totalResults.totalLaborCost }}</td>
+                                            <td></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -308,23 +552,26 @@
                 </li>
                 <li class="tab_content_item" data-tab="3">
                     <h1>3. Целевая группа</h1>
-                    {% if passport %}
+                    {% if targetGroup %}
+                    <form method="post" action="{% url 'passport_update_third' passport.id %}">
+                    {% elif passport %}
                     <form method="post" action="{% url 'passport_add_third' passport.id %}">
                     {% else %}
                     <form method="post" action="{% url 'passport_add_third' 0 %}">
                     {% endif %}
                         {% csrf_token %}
+                        {% if targetGroup %}
                         <div class="row">
                             <div class="col-6 align_end">
                                 <label for="populationVoted">Численность населения, проголосовавших за проект, чел.</label>
-                                <input name="populationVoted" id="populationVoted" type="number" title="" autocomplete="off">
+                                <input name="populationVoted" id="populationVoted" type="number" autocomplete="off" value="{{ targetGroup.populationVoted }}">
                             </div>
                             <div class="col-6 align_end">
                                 <label for="populationPart">
                                     Численность населения, подтвердившего участие в 
                                     реализации проекта, чел.
                                 </label>
-                                <input name="populationPart" id="populationPart" type="number" title="" autocomplete="off">
+                                <input name="populationPart" id="populationPart" type="number" autocomplete="off" value="{{ targetGroup.populationPart }}">
                             </div>
                         </div>
                         <h3>
@@ -334,15 +581,60 @@
                         <div class="row">
                             <div class="col-4 align_end">
                                 <label for="younger">от 0 до 18 лет</label>
-                                <input name="younger" id="younger" type="number" step="1" autocomplete="off">
+                                <input name="younger" id="younger" type="number" autocomplete="off" value="{{ targetGroup.younger }}">
                             </div>
                             <div class="col-4 align_end">
                                 <label for="adult">от 18 до 35 лет</label>
-                                <input name="adult" id="adult" type="number" step="1" autocomplete="off">
+                                <input name="adult" id="adult" type="number" autocomplete="off" value="{{ targetGroup.adult }}">
                             </div>
                             <div class="col-4 align_end">
                                 <label for="older">старше 35 лет</label>
-                                <input name="older" id="older" type="number" step="1" autocomplete="off">
+                                <input name="older" id="older" type="number" autocomplete="off" value="{{ targetGroup.older }}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-9 align_end">
+                                <h3>Всего:</h3>
+                            </div>
+                            <div class="col-3 align_end">
+                                <input class="static" name="countBenefit" id="countBenefit" type="text" value="{{ targetGroup.countBenefit }}" readonly>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4 offset-8">
+                                <button type="submit">Изменить</button>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="row">
+                            <div class="col-6 align_end">
+                                <label for="populationVoted">Численность населения, проголосовавших за проект, чел.</label>
+                                <input name="populationVoted" id="populationVoted" type="number" autocomplete="off">
+                            </div>
+                            <div class="col-6 align_end">
+                                <label for="populationPart">
+                                    Численность населения, подтвердившего участие в 
+                                    реализации проекта, чел.
+                                </label>
+                                <input name="populationPart" id="populationPart" type="number" autocomplete="off">
+                            </div>
+                        </div>
+                        <h3>
+                            Количество выгодоприобретателей (жителей, которые получат пользу от проекта, 
+                            пользователей объектами, созданными (обустроенными) в рамках проекта), чел.
+                        </h3>
+                        <div class="row">
+                            <div class="col-4 align_end">
+                                <label for="younger">от 0 до 18 лет</label>
+                                <input name="younger" id="younger" type="number" autocomplete="off">
+                            </div>
+                            <div class="col-4 align_end">
+                                <label for="adult">от 18 до 35 лет</label>
+                                <input name="adult" id="adult" type="number" autocomplete="off">
+                            </div>
+                            <div class="col-4 align_end">
+                                <label for="older">старше 35 лет</label>
+                                <input name="older" id="older" type="number" autocomplete="off">
                             </div>
                         </div>
                         <div class="row">
@@ -358,16 +650,95 @@
                                 <button type="submit">Добавить</button>
                             </div>
                         </div>
+                        {% endif %}
                     </form>
                 </li>
                 <li class="tab_content_item" data-tab="4">
                     <h1>4. Описание проекта</h1>
-                    {% if passport %}
+                    {% if projectDesc %}
+                    <form method="post" action="{% url 'passport_update_forth' passport.id %}">
+                    {% elif passport %}
                     <form method="post" action="{% url 'passport_add_forth' passport.id %}">
                     {% else %}
                     <form method="post" action="{% url 'passport_add_forth' 0 %}">
                     {% endif %}
                         {% csrf_token %}
+                        {% if projectDesc %}
+                        <label for="targetProject">Цель проекта</label>
+                        <input name="targetProject" id="targetProject" type="text" autocomplete="off" value="{{ projectDesc.targetProject }}" required>
+                        <label for="tasksProject">Задачи проекта</label>
+                        <textarea name="tasksProject" id="tasksProject" rows="3">{{ projectDesc.tasksProject }}</textarea>
+                        <label for="events">
+                            Описание мероприятий предпроектного исследования (в случае его проведения)<sup>1</sup>
+                        </label>
+                        <textarea name="events" id="events" rows="3">{{ projectDesc.events }}</textarea>
+                        <label for="troubles">
+                            Описание проблемы, на решение которой направлен проект, с приложением эскизного 
+                            проекта размещения элементов благоустройства, карты-схемы расположения объектов 
+                            благоустройства в населенном пункте 
+                        </label>
+                        <textarea name="troubles" id="troubles" rows="7">{{ projectDesc.troubles }}</textarea>
+                        <div class="row checkbox">
+                            <div class="col-1">
+                                <input name="stateMainEvents" id="stateMainEvents" type="checkbox" {% if projectDesc.stateMainEvents %} checked {% endif %}>
+                            </div>
+                            <div class="col-11">
+                                <label for="stateMainEvents">
+                                    Участие в мероприятиях государственной программы Российской Федерации 
+                                    «Комплексное развитие сельских территорий», утвержденной постановлением 
+                                    Правительства Российской Федерации от 31 мая 2019 г. № 696, в течении 3 лет, 
+                                    предшествующих году предоставления субсидии на реализацию проекта (отметьте, если да) 
+                                </label>
+                            </div>
+                        </div>
+                        <label for="nameStateMainEvents">
+                            Если да, описываются реализованные мероприятия на территории реализации проекта
+                        </label>
+                        <textarea name="nameStateMainEvents" id="nameStateMainEvents" rows="3">{{ projectDesc.nameStateMainEvents }}</textarea>
+                        <div class="row checkbox">
+                            <div class="col-1">
+                                <input name="stateEvents" id="stateEvents" type="checkbox" {% if projectDesc.stateEvents %} checked {% endif %}>
+                            </div>
+                            <div class="col-11">
+                                <label for="stateEvents">
+                                    Участие в мероприятиях других государственных программ Российской Федерации, 
+                                    Забайкальского края, муниципальных программ и проектах, в течении 3 лет, 
+                                    предшествующих году предоставления субсидии на реализацию проекта (отметьте, если да) 
+                                </label>
+                            </div>
+                        </div>
+                        <label for="nameStateEvents">
+                            Если да, описываются реализованные мероприятия на территории реализации проекта
+                        </label>
+                        <textarea name="nameStateEvents" id="nameStateEvents" rows="3">{{ projectDesc.nameStateEvents }}</textarea>
+                        <label for="security">
+                            Соответствие нормам безопасности и законодательству Российской Федерации, 
+                            включая ссылки на соответствующие нормативы (в случае использования типовой 
+                            проектной документации дается информация о ее источнике)
+                        </label>
+                        <textarea name="security" id="security" rows="3">{{ projectDesc.security }}</textarea>
+                        <label for="justification">
+                            Качество и обоснованность архитектурных и планировочных решений<sup>2</sup>
+                        </label>
+                        <textarea name="justification" id="justification" rows="3">{{ projectDesc.justification }}</textarea>
+                        <label for="forms">
+                            Формы проведения процедур по выбору подрядчика либо закупок
+                        </label>
+                        <textarea name="forms" id="forms" type="text" rows="2">{{ projectDesc.forms|default:"" }}</textarea>
+                        <label for="supportEvents">
+                            Мероприятия по поддержанию и/или развитию полученных в рамках проекта результатов<sup>3</sup>  
+                        </label>
+                        <textarea name="supportEvents" id="supportEvents" rows="3">{{ projectDesc.supportEvents }}</textarea>
+                        <label for="mechanisms">
+                            Механизмы содержания и эксплуатации объектов по благоустройству 
+                        </label>
+                        <textarea name="mechanisms" id="mechanisms" rows="3">{{ projectDesc.mechanisms }}</textarea>
+                        <div class="row">
+                            <div class="col-4 offset-8">
+                                <button type="submit">Изменить</button>
+                            </div>
+                        </div>
+                        {% else %}
                         <label for="targetProject">Цель проекта</label>
                         <input name="targetProject" id="targetProject" type="text" autocomplete="off" required>
                         <label for="tasksProject">Задачи проекта</label>
@@ -442,6 +813,7 @@
                                 <button type="submit">Добавить</button>
                             </div>
                         </div>
+                        {% endif %}
                         <h3>Примечание:</h3>
                         <p>
                             <sup>1</sup> Указываются: исходные данные по населенному пункту, точки притяжения, 
@@ -507,6 +879,14 @@
                             <div class="col-12">
                                 {% if planeEvents %}
                                 <table class="data_table">
+                                    <colgroup>
+                                        <col style="width:25%">
+                                        <col style="width:25%">
+                                        <col style="width:12.5%">
+                                        <col style="width:12.5%">
+                                        <col style="width:20%">
+                                        <col style="width:5%">
+                                    </colgroup>
                                     <thead>
                                         <tr>
                                             <th>Вид ра&shy;бот</th>
@@ -514,16 +894,27 @@
                                             <th>Сро&shy;ки реа&shy;ли&shy;за&shy;ции (на&shy;ча&shy;ло)</th>
                                             <th>Сро&shy;ки реа&shy;ли&shy;за&shy;ции (ко&shy;нец)</th>
                                             <th>От&shy;ветст&shy;вен&shy;ный ис&shy;пол&shy;ни&shy;тель</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {% for item in planeEvents %}
                                         <tr>
-                                            <td>{{ item.typeEvent }}</td>
-                                            <td>{{ item.nameEvent }}</td>
-                                            <td>{{ item.dedlineStart }}</td>
-                                            <td>{{ item.dedlineEnd }}</td>
-                                            <td>{{ item.performer }}</td>
+                                            <td>{{ item.typeEvent|default:"-" }}</td>
+                                            <td>{{ item.nameEvent|default:"-" }}</td>
+                                            <td>{{ item.dedlineStart|default:"-" }}</td>
+                                            <td>{{ item.dedlineEnd|default:"-" }}</td>
+                                            <td>{{ item.performer|default:"-" }}</td>
+                                            <td>
+                                                <a href="{% url 'passport_delete_fifth' item.id %}" title="Удалить">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 20 20">
+                                                        <path fill="currentColor" fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16a8 8 0 0 0 0 
+                                                        16ZM8.28 7.22a.75.75 0 0 0-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 1 0 1.06 1.06L10 
+                                                        11.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L11.06 10l1.72-1.72a.75.75 0 0 0-1.06-1.06L10 
+                                                        8.94L8.28 7.22Z" clip-rule="evenodd"/>
+                                                    </svg>
+                                                </a>
+                                            </td>
                                         </tr>
                                         {% endfor %}
                                     </tbody>
@@ -577,21 +968,21 @@
                                 <label for="districtBudget">
                                     Бюджет муниципального района (муниципального или городского округа)<sup>2</sup>
                                 </label>
-                                <input name="districtBudget" id="districtBudget" type="number" title="" autocomplete="off">
+                                <input name="districtBudget" id="districtBudget" type="number" step="0.001" autocomplete="off">
                             </div>
                             <div class="col-6 align_end">
                                 <label for="stateExpenses">Запрашиваемые средства государственной поддержки</label>
-                                <input name="stateExpenses" id="stateExpenses" type="number" title="" autocomplete="off">
+                                <input name="stateExpenses" id="stateExpenses" type="number" step="0.001" autocomplete="off">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-6 align_end">
                                 <label for="settlementBudget">Бюджет сельского (городского) поселения</label>
-                                <input name="settlementBudget" id="settlementBudget" type="number" title="" autocomplete="off">
+                                <input name="settlementBudget" id="settlementBudget" type="number" step="0.001" autocomplete="off">
                             </div>
                             <div class="col-6 align_end">
                                 <label for="offBudgetExpenses">Внебюджетные источники</label>
-                                <input name="offBudgetExpenses" id="offBudgetExpenses" type="number" title="" autocomplete="off">
+                                <input name="offBudgetExpenses" id="offBudgetExpenses" type="number" step="0.001" autocomplete="off">
                             </div>
                         </div>
                         <h3>Предварительный просмотр</h3>
@@ -599,6 +990,15 @@
                             <div class="col-12">
                             {% if costEstimate %}
                                 <table class="data_table">
+                                    <colgroup>
+                                        <col style="width:20%">
+                                        <col style="width:15%">
+                                        <col style="width:15%">
+                                        <col style="width:15%">
+                                        <col style="width:15%">
+                                        <col style="width:15%">
+                                        <col style="width:5%">
+                                    </colgroup>
                                     <thead>
                                         <tr>
                                             <th rowspan="3">Ста&shy;тьи рас&shy;хо&shy;дов</th>
@@ -606,37 +1006,50 @@
                                             <th rowspan="3">За&shy;пра&shy;ши&shy;вае&shy;мые средст&shy;ва 
                                                 го&shy;су&shy;дарст&shy;вен&shy;ной под&shy;держ&shy;ки</th>
                                             <th colspan="3">Вклад ини&shy;ци&shy;ато&shy;ра про&shy;ек&shy;та</th>
+                                            <th rowspan="3"></th>
                                         </tr>
                                         <tr>
-                                            <th rowspan="2">Вне&shy;бюд&shy;жет&shy;ные ис&shy;точ&shy;ни&shy;ки</th>
                                             <th colspan="2">Мест&shy;ный бюд&shy;жет</th>
+                                            <th rowspan="2" style="border-right: 1px solid;">Вне&shy;бюд&shy;жет&shy;ные ис&shy;точ&shy;ни&shy;ки</th>
+                                            
                                         </tr>
                                         <tr>
                                             <th>Бюд&shy;жет му&shy;ни&shy;ци&shy;паль&shy;но&shy;го 
                                                 рай&shy;она (му&shy;ни&shy;ци&shy;паль&shy;но&shy;го или 
                                                 го&shy;род&shy;ско&shy;го ок&shy;ру&shy;га)</th>
-                                            <th style="border-right: 1px;">Бюд&shy;жет сельс&shy;ко&shy;го 
+                                            <th style="border-right: 1px solid;">Бюд&shy;жет сельс&shy;ко&shy;го 
                                                 (го&shy;род&shy;ско&shy;го) по&shy;се&shy;ле&shy;ния</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {% for item in costEstimate %}
                                         <tr>
-                                            <td>{{ item.expenseItem }}</td>
-                                            <td>{{ item.generalExpenses }}</td>
-                                            <td>{{ item.stateExpenses }}</td>
-                                            <td>{{ item.districtBudget }}</td>
-                                            <td>{{ item.settlementBudget }}</td>
-                                            <td>{{ item.offBudgetExpenses }}</td>
+                                            <td>{{ item.expenseItem|default:"-" }}</td>
+                                            <td>{{ item.generalExpenses|default:"0" }}</td>
+                                            <td>{{ item.stateExpenses|default:"0" }}</td>
+                                            <td>{{ item.districtBudget|default:"0" }}</td>
+                                            <td>{{ item.settlementBudget|default:"0" }}</td>
+                                            <td>{{ item.offBudgetExpenses|default:"0" }}</td>
+                                            <td>
+                                                <a href="{% url 'passport_delete_sixth' item.id %}" title="Удалить">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 20 20">
+                                                        <path fill="currentColor" fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16a8 8 0 0 0 0 
+                                                        16ZM8.28 7.22a.75.75 0 0 0-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 1 0 1.06 1.06L10 
+                                                        11.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L11.06 10l1.72-1.72a.75.75 0 0 0-1.06-1.06L10 
+                                                        8.94L8.28 7.22Z" clip-rule="evenodd"/>
+                                                    </svg>
+                                                </a>
+                                            </td>
                                         </tr>
                                         {% endfor %}
                                         <tr>
                                             <th style="border-bottom: none;">Всего:</th>
-                                            <td>{{ totalResults.totalGeneralExpenses }}</td>
-                                            <td>{{ totalResults.totalStateExpenses }}</td>
-                                            <td>{{ totalResults.totalDistrictBudget }}</td>
-                                            <td>{{ totalResults.totalSettlementBudget }}</td>
-                                            <td>{{ totalResults.totalOffBudgetExpenses }}</td>
+                                            <td>{{ totalResults.totalGeneralExpenses|default:"0" }}</td>
+                                            <td>{{ totalResults.totalStateExpenses|default:"0" }}</td>
+                                            <td>{{ totalResults.totalDistrictBudget|default:"0" }}</td>
+                                            <td>{{ totalResults.totalSettlementBudget|default:"0" }}</td>
+                                            <td>{{ totalResults.totalOffBudgetExpenses|default:"0" }}</td>
+                                            <td></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -646,21 +1059,16 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-4 offset-7">
+                            <div class="col-4 offset-4">
                                 <button type="submit">Добавить</button>
                             </div>
-                            <div class="col-1">
+                            <div class="col-4">
                                 {% if passport %}
                                 <a href="{% url 'passport' passport.id %}" title="Продолжить">
                                 {% else %}
                                 <a href="{% url 'passport' 0 %}" title="Продолжить">
                                 {% endif %}
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 20 20">
-                                        <path fill="currentColor" d="M18.182 0C19.186 0 20 .814 20 1.818v16.364A1.818 1.818 
-                                        0 0 1 18.182 20H1.818A1.818 1.818 0 0 1 0 18.182V1.818C0 .814.814 0 1.818 0h16.364ZM8.749 
-                                        5.627a.682.682 0 1 0-.977.951l3.402 3.491l-3.397 3.42a.682.682 0 0 0 
-                                        .967.96l3.87-3.894a.682.682 0 0 0 .005-.957Z"/>
-                                    </svg>
+                                    <button type="button">Завершить</button>
                                 </a>
                             </div>
                         </div>
@@ -688,10 +1096,17 @@
 
 <script src="{% static 'js/functions.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/count.js' %}" type="text/javascript"></script>
+
 {% if tab_id %}
-<script type="text/javascript">showSnackbar();</script>
 <script type="text/javascript"> var id = "{{ tab_id|escapejs }}"; </script>
 <script type="text/javascript">switchTab(id);</script>
+{% endif %}
+
+{% if messages %}
+{% for message in messages %}
+<script type="text/javascript"> var message = "{{ message|escapejs }}"; </script>
+<script type="text/javascript">showSnackbar(message);</script>
+{% endfor %}
 {% endif %}
 
 {% endblock scripts %}

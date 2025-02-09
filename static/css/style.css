@@ -92,6 +92,9 @@ form button {
 form svg {
     margin-top: 30px;
 }
+form table svg {
+    margin: 0px;
+}
 
 input, textarea, select {
     display: block;
@@ -182,6 +185,13 @@ header .logo {
     padding: 50px 0 70px 0;
 }
 
+.tab_content a {
+    font-weight: 700;
+    text-decoration: underline;
+}
+.tab_content a:hover {
+    color: #8F2F73;
+}
 .tab_header_item {
     padding: 15px 30px;
     cursor: pointer;
@@ -278,7 +288,7 @@ table tr:last-child td {
     margin: 0 0 15px 0;
 }
 .project a button {
-    margin-top: 30px;
+    margin-top: 20px;
 }
 
 .login {

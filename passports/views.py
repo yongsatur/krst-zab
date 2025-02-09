@@ -3,7 +3,6 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import FileResponse
-import os.path
 import xlsxwriter
 
 
@@ -18,8 +17,7 @@ def index(request):
 def passport(request, id):
     passport = get_object_or_404(Passports, id = id)
 
-    if not passport.file or not os.path.exists(passport.file.url):
-        excel(request, passport.id)
+    excel(request, passport.id)
 
     laborPart = LaborPart.objects.filter(passport = passport)
     targetGroup = TargetGroup.objects.filter(passport = passport)
@@ -27,6 +25,7 @@ def passport(request, id):
     planeEvents = PlaneEvents.objects.filter(passport = passport)
     costEstimate = CostEstimate.objects.filter(passport = passport)
     totalResults = TotalResults.objects.filter(passport = passport)
+
     return render(request, 'passport.html', { 
         'passport': passport, 'laborPart': laborPart, 'targetGroup': targetGroup,
         'projectDesc': projectDesc, 'planeEvents': planeEvents, 
@@ -43,11 +42,13 @@ def passport_add_first(request):
         if form.is_valid():
             passport = form.save(commit = False)
             passport.user = user
+            passport.save()
             passport.file = 'passports/Passport №' + str(passport.id) + '.xlsx'
             passport.save()
+            messages.success(request, ('Данные были успешно отправлены!'))
             return redirect('passport_add_second', passport.id)
         else:
-            messages.success(request, ('Возникла ошибка! Пожалуйста, повторите позже.'))
+            messages.warning(request, ('Возникла ошибка! Пожалуйста, повторите позже.'))
             return redirect('passport_add_first')
     else:
         form = PassportForm()
@@ -55,10 +56,33 @@ def passport_add_first(request):
     
 
 @login_required(login_url = 'authorization')
+def passport_update_first(request, id):
+    passport = get_object_or_404(Passports, id = id)
+    user = request.user
+
+    if request.method == 'POST':
+        form = PassportForm(request.POST, instance = passport)
+        if form.is_valid():
+            passport = form.save(commit = False)
+            passport.user = user
+            passport.save()
+            passport.file = 'passports/Passport №' + str(passport.id) + '.xlsx'
+            passport.save()
+            messages.success(request, ('Данные были успешно изменены!'))
+            return redirect('passport_update_first', passport.id)
+        else:
+            messages.warning(request, ('Возникла ошибка! Пожалуйста, повторите позже.'))
+            return redirect('passport_update_first', passport.id)
+    else:
+        form = PassportForm()
+        return render(request, 'passport_add.html', { 'form': form, 'passport': passport, 'tab_id': 1  })
+    
+
+@login_required(login_url = 'authorization')
 def passport_add_second(request, id):
     passport = get_object_or_404(Passports, id = id)
     totalResults, created = TotalResults.objects.get_or_create(passport = passport)
-    laborPart_all = LaborPart.objects.filter(passport = passport)
+    laborPart_all = LaborPart.objects.filter(passport = passport)        
 
     if request.method == 'POST':
         form = LaborPartForm(request.POST)
@@ -67,19 +91,24 @@ def passport_add_second(request, id):
             laborPart.passport = passport
             laborPart.save()
 
-            totalResults.totalLaborCost += laborPart.laborCost 
+            if laborPart.laborCost != None:
+                totalResults.totalLaborCost += laborPart.laborCost  
             totalResults.save()
 
+            messages.success(request, ('Данные были успешно отправлены!'))
             return render(request, 'passport_add.html', { 
                 'form': form, 'passport': passport, 'laborPart': laborPart_all, 
                 'totalResults': totalResults, 'tab_id': 2 
             })
         else:
-            messages.success(request, ('Возникла ошибка! Пожалуйста, повторите позже.'))
+            messages.warning(request, ('Возникла ошибка! Пожалуйста, повторите позже.'))
             return redirect('passport_add_second', passport.id)
     else:
-        form = PassportForm()
-        return render(request, 'passport_add.html', { 'form': form, 'passport': passport, 'tab_id': 2 })
+        form = LaborPartForm()
+        return render(request, 'passport_add.html', { 
+            'form': form, 'passport': passport, 'laborPart': laborPart_all, 
+            'totalResults': totalResults, 'tab_id': 2 
+        })
     
 
 @login_required(login_url = 'authorization')
@@ -92,19 +121,46 @@ def passport_add_third(request, id):
             targetGroup = form.save(commit = False)
             targetGroup.passport = passport
             targetGroup.save()
+            messages.success(request, ('Данные были успешно отправлены!'))
             return redirect('passport_add_forth', passport.id)
         else:
-            messages.success(request, ('Возникла ошибка! Пожалуйста, повторите позже.'))
+            messages.warning(request, ('Возникла ошибка! Пожалуйста, повторите позже.'))
             return redirect('passport_add_third', passport.id)
     else:
-        form = PassportForm()
+        form = TargetGroupForm()
         return render(request, 'passport_add.html', { 'form': form, 'passport': passport, 'tab_id': 3 })
+    
+
+@login_required(login_url = 'authorization')
+def passport_update_third(request, id):
+    passport = get_object_or_404(Passports, id = id)
+
+    try:
+        targetGroup = get_object_or_404(TargetGroup, passport = passport)
+    except:
+        return redirect('passport_add_third', passport.id)
+
+    if request.method == 'POST':
+        form = TargetGroupForm(request.POST, instance = targetGroup)
+        if form.is_valid():
+            targetGroup = form.save(commit = False)
+            targetGroup.passport = passport
+            targetGroup.save()
+            messages.success(request, ('Данные были успешно изменены!'))
+            return redirect('passport_update_third', passport.id)
+        else:
+            messages.warning(request, ('Возникла ошибка! Пожалуйста, повторите позже.'))
+            return redirect('passport_update_third', passport.id)
+    else:
+        form = TargetGroupForm()
+        return render(request, 'passport_add.html', { 
+            'form': form, 'passport': passport, 'targetGroup': targetGroup, 'tab_id': 3
+        })
     
 
 @login_required(login_url = 'authorization')
 def passport_add_forth(request, id):
     passport = get_object_or_404(Passports, id = id)
-    typeEvents = TypeEvents.objects.all()
 
     if request.method == 'POST':
         form = ProjectDescForm(request.POST)
@@ -112,13 +168,41 @@ def passport_add_forth(request, id):
             projectDesc = form.save(commit = False)
             projectDesc.passport = passport
             projectDesc.save()
+            messages.success(request, ('Данные были успешно отправлены!'))
             return redirect('passport_add_fifth', passport.id)
         else:
-            messages.success(request, ('Возникла ошибка! Пожалуйста, повторите позже.'))
+            messages.warning(request, ('Возникла ошибка! Пожалуйста, повторите позже.'))
             return redirect('passport_add_forth', passport.id)
     else:
-        form = PassportForm()
+        form = ProjectDescForm()
         return render(request, 'passport_add.html', { 'form': form, 'passport': passport, 'tab_id': 4 })
+    
+
+@login_required(login_url = 'authorization')
+def passport_update_forth(request, id):
+    passport = get_object_or_404(Passports, id = id)
+
+    try:
+        projectDesc = get_object_or_404(ProjectDesc, passport = passport)
+    except:
+        return redirect('passport_add_forth', passport.id)
+
+    if request.method == 'POST':
+        form = ProjectDescForm(request.POST, instance = projectDesc)
+        if form.is_valid():
+            projectDesc = form.save(commit = False)
+            projectDesc.passport = passport
+            projectDesc.save()
+            messages.success(request, ('Данные были успешно изменены!'))
+            return redirect('passport_update_forth', passport.id)
+        else:
+            messages.warning(request, ('Возникла ошибка! Пожалуйста, повторите позже.'))
+            return redirect('passport_update_forth', passport.id)
+    else:
+        form = ProjectDescForm()
+        return render(request, 'passport_add.html', { 
+            'form': form, 'passport': passport, 'projectDesc': projectDesc, 'tab_id': 4
+        })
     
 
 @login_required(login_url = 'authorization')
@@ -132,18 +216,21 @@ def passport_add_fifth(request, id):
         if form.is_valid():
             planeEvents = form.save(commit = False)
             planeEvents.passport = passport
-
             planeEvents.save()
+            messages.success(request, ('Данные были успешно отправлены!'))
             return render(request, 'passport_add.html', { 
                 'form': form, 'typeEvents': typeEvents, 'passport': passport, 
                 'planeEvents': planeEvents_all, 'tab_id': 5 
             })
         else:
-            messages.success(request, ('Возникла ошибка! Пожалуйста, повторите позже.'))
+            messages.warning(request, ('Возникла ошибка! Пожалуйста, повторите позже.'))
             return redirect('passport_add_fifth', passport.id)
     else:
-        form = PassportForm()
-        return render(request, 'passport_add.html', { 'form': form, 'typeEvents': typeEvents, 'passport': passport, 'tab_id': 5 })
+        form = PlaneEventsForm()
+        return render(request, 'passport_add.html', { 
+            'form': form, 'typeEvents': typeEvents, 'passport': passport,
+            'planeEvents': planeEvents_all, 'tab_id': 5 
+        })
     
 
 @login_required(login_url = 'authorization')
@@ -159,24 +246,88 @@ def passport_add_sixth(request, id):
             costEstimate.passport = passport
             costEstimate.save()
 
-            totalResults.totalGeneralExpenses += costEstimate.generalExpenses
-            totalResults.totalStateExpenses += costEstimate.stateExpenses
-            totalResults.totalDistrictBudget += costEstimate.districtBudget
-            totalResults.totalSettlementBudget += costEstimate.settlementBudget
-            totalResults.totalOffBudgetExpenses += costEstimate.offBudgetExpenses
+            if costEstimate.generalExpenses != None:
+                totalResults.totalGeneralExpenses += costEstimate.generalExpenses
+            if costEstimate.stateExpenses != None:
+                totalResults.totalStateExpenses += costEstimate.stateExpenses
+            if costEstimate.districtBudget != None:
+                totalResults.totalDistrictBudget += costEstimate.districtBudget
+            if costEstimate.settlementBudget != None:
+                totalResults.totalSettlementBudget += costEstimate.settlementBudget
+            if costEstimate.offBudgetExpenses != None:
+                totalResults.totalOffBudgetExpenses += costEstimate.offBudgetExpenses
             totalResults.save()
 
+            messages.success(request, ('Данные были успешно отправлены!'))
             return render(request, 'passport_add.html', { 
                 'form': form, 'passport': passport, 'tab_id': 6,
                 'costEstimate': costEstimate_all, 'totalResults': totalResults
             })
         else:
-            messages.success(request, ('Возникла ошибка! Пожалуйста, повторите позже.'))
+            messages.warning(request, ('Возникла ошибка! Пожалуйста, повторите позже.'))
             return redirect('passport_add_sixth', passport.id)
     else:
-        form = PassportForm()
-        return render(request, 'passport_add.html', { 'form': form, 'passport': passport, 'tab_id': 6 })
+        form = CostEstimateForm()
+        return render(request, 'passport_add.html', { 
+            'form': form, 'passport': passport, 'costEstimate': costEstimate_all, 
+            'totalResults': totalResults, 'tab_id': 6 
+        })
     
+
+@login_required(login_url = 'authorization')
+def passport_delete_second(request, id):
+    laborPart = get_object_or_404(LaborPart, id = id)
+    totalResults, created = TotalResults.objects.get_or_create(passport = laborPart.passport)
+    laborPart_all = LaborPart.objects.filter(passport = laborPart.passport)
+
+    laborPart.delete()
+
+    totalResults.totalLaborCost = 0
+    for item in laborPart_all:
+        if item.laborCost != None:
+            totalResults.totalLaborCost += item.laborCost  
+    totalResults.save()
+
+    return redirect('passport_add_second', laborPart.passport.id)
+
+
+@login_required(login_url = 'authorization')
+def passport_delete_fifth(request, id):
+    planeEvents = get_object_or_404(PlaneEvents, id = id)
+    planeEvents.delete()
+
+    return redirect('passport_add_fifth', planeEvents.passport.id)
+
+
+@login_required(login_url = 'authorization')
+def passport_delete_sixth(request, id):
+    costEstimate = get_object_or_404(CostEstimate, id = id)
+    totalResults, created = TotalResults.objects.get_or_create(passport = costEstimate.passport)
+    costEstimate_all = CostEstimate.objects.filter(passport = costEstimate.passport)
+
+    costEstimate.delete()
+
+    totalResults.totalGeneralExpenses = 0
+    totalResults.totalStateExpenses = 0
+    totalResults.totalDistrictBudget = 0
+    totalResults.totalSettlementBudget = 0
+    totalResults.totalOffBudgetExpenses = 0
+
+    for item in costEstimate_all:
+        if item.generalExpenses != None:
+            totalResults.totalGeneralExpenses += item.generalExpenses
+        if item.stateExpenses != None:
+            totalResults.totalStateExpenses += item.stateExpenses
+        if item.districtBudget != None:
+            totalResults.totalDistrictBudget += item.districtBudget
+        if item.settlementBudget != None:
+            totalResults.totalSettlementBudget += item.settlementBudget
+        if item.offBudgetExpenses != None:
+            totalResults.totalOffBudgetExpenses += item.offBudgetExpenses
+    totalResults.save()
+
+    return redirect('passport_add_sixth', costEstimate.passport.id)
+
 
 @login_required(login_url = 'authorization')
 def excel(request, id):
@@ -492,7 +643,7 @@ def excel(request, id):
     worksheet_5.set_row(1, 50)
     worksheet_5.set_row(3, 50)
     worksheet_5.set_row(5, 50)
-    worksheet_5.set_row(7, 70)
+    worksheet_5.set_row(7, 50)
     worksheet_5.set_default_row(22)
 
     worksheet_5.merge_range("A1:D1", "V. План реализации мероприятий проекта", header_sheet)
@@ -634,10 +785,5 @@ def excel(request, id):
 @login_required(login_url = 'authorization')
 def export(request, id):
     passport = get_object_or_404(Passports, id = id)
-    
-    if not os.path.exists(passport.file.url):
-        excel(request, passport.id)
-
-    response = FileResponse(open('media/passports/Passport №' + str(passport.id) + '.xlsx', 'rb'))
-
-    return response
+    excel(request, passport.id)
+    return FileResponse(open('media/passports/Passport №' + str(passport.id) + '.xlsx', 'rb'))

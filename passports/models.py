@@ -1,3 +1,4 @@
+import os
 from django.db import models
 from users.models import *
 from django.urls import reverse
@@ -6,39 +7,39 @@ from django.utils import timezone
 
 
 class Passports(models.Model):
-    user = models.ForeignKey(User, verbose_name=u"Район", on_delete = models.CASCADE)
+    user = models.ForeignKey(User, verbose_name = u"Район", on_delete = models.CASCADE)
 
-    nameProject = models.CharField(verbose_name=u"Наименование проекта", max_length = 250, db_index = True)
-    indicators = models.TextField(verbose_name=u"Количественные показатели (показатель) результатов проекта по объектам и мероприятиям, включенным в проект")
-    address = models.TextField(verbose_name=u"Адрес или описание местоположения")
-    borderArea = models.BooleanField(verbose_name=u"Приграничная территория (да/нет)", default = False)
-    OKTMO = models.CharField(verbose_name=u"ОКТМО населенного (-ых) пункта (-ов)", max_length = 250)
-    improvedArea = models.DecimalField(verbose_name=u"Благоустраиваемая площадь, на которой реализуется проект, кв.м", max_digits = 20, decimal_places = 3, blank = True, null = True)
-    populationLocality = models.PositiveBigIntegerField(verbose_name=u"Численность населения на 1 января года подачи заявки в населенном (-ых) пункте (-ах), в котором реализуется проект, чел.", blank = True, null = True)
-    countMonth = models.PositiveIntegerField(verbose_name=u"Продолжительность реализации проекта,  количество месяцев (до 31 декабря года, в котором получена субсидия)", blank = True, null = True)
-    dateStartPlane = models.DateField(verbose_name=u"Планируемая дата начала реализации проекта", blank = True, null = True)
-    dateEndPlane = models.DateField(verbose_name=u"Планируемая дата окончания реализации проекта", blank = True, null = True)
-    initiativeGroup = models.TextField(verbose_name=u"Описание состава инициативной группы", blank = True, null = True)
-    generalCost = models.DecimalField(verbose_name=u"Общие расходы по проекту, рублей:", max_digits = 15, decimal_places = 3)
-    stateSupport = models.DecimalField(verbose_name=u"За счет средств государственной поддержки (федерального бюджета и бюджета Забайкальского края)", max_digits = 15, decimal_places = 3, blank = True, null = True)
-    localBudget = models.DecimalField(verbose_name=u"За счет средств местного бюджета", max_digits = 15, decimal_places = 3, blank = True, null = True)
-    offBudget = models.DecimalField(verbose_name=u"За счет средств внебюджетных источников (вклад граждан, юридических лиц, индивидуальных предпринимателей, общественных организаций)", max_digits = 15, decimal_places = 3, blank = True, null = True)
-    citizen = models.DecimalField(verbose_name=u"Вклад граждан, рублей", max_digits = 15, decimal_places = 3, blank = True, null = True)
-    citizenMoney = models.DecimalField(verbose_name=u"денежными средствами", max_digits = 15, decimal_places = 3, blank = True, null = True)
-    citizenWork = models.DecimalField(verbose_name=u"трудовым участием", max_digits = 15, decimal_places = 3, blank = True, null = True)
-    citizenRooms = models.DecimalField(verbose_name=u"предоставлением помещений", max_digits = 15, decimal_places = 3, blank = True, null = True)
-    citizenTechnical = models.DecimalField(verbose_name=u"предоставлением технических средств", max_digits = 15, decimal_places = 3, blank = True, null = True)
-    publicOrg = models.DecimalField(verbose_name=u"Вклад общественных, включая волонтерские, организаций, рублей", max_digits = 15, decimal_places = 3, blank = True, null = True)
-    publicOrgMoney = models.DecimalField(verbose_name=u"денежными средствами", max_digits = 15, decimal_places = 3, blank = True, null = True)
-    publicOrgWork = models.DecimalField(verbose_name=u"трудовым участием", max_digits = 15, decimal_places = 3, blank = True, null = True)
-    publicOrgRooms = models.DecimalField(verbose_name=u"предоставлением помещений", max_digits = 15, decimal_places = 3, blank = True, null = True)
-    publicOrgTechnical = models.DecimalField(verbose_name=u"предоставлением технических средств", max_digits = 15, decimal_places = 3, blank = True, null = True)
-    legalEntities = models.DecimalField(verbose_name=u"Вклад юридических лиц (индивидуальных предпринимателей), рублей", max_digits = 15, decimal_places = 3, blank = True, null = True)
-    legalEntitiesMoney = models.DecimalField(verbose_name=u"денежными средствами", max_digits = 15, decimal_places = 3, blank = True, null = True)
-    legalEntitiesWork = models.DecimalField(verbose_name=u"трудовым участием", max_digits = 15, decimal_places = 3, blank = True, null = True)
-    legalEntitiesRooms = models.DecimalField(verbose_name=u"предоставлением помещений", max_digits = 15, decimal_places = 3, blank = True, null = True)
-    legalEntitiesTechnical = models.DecimalField(verbose_name=u"предоставлением технических средств", max_digits = 15, decimal_places = 3, blank = True, null = True)
-    created = models.DateTimeField(verbose_name=u"Создано", auto_now_add = True)
+    nameProject = models.CharField(verbose_name = u"Наименование проекта", max_length = 250, db_index = True)
+    indicators = models.TextField(verbose_name = u"Количественные показатели (показатель) результатов проекта по объектам и мероприятиям, включенным в проект")
+    address = models.TextField(verbose_name = u"Адрес или описание местоположения")
+    borderArea = models.BooleanField(verbose_name = u"Приграничная территория (да/нет)", default = False)
+    OKTMO = models.CharField(verbose_name = u"ОКТМО населенного (-ых) пункта (-ов)", max_length = 250)
+    improvedArea = models.DecimalField(verbose_name = u"Благоустраиваемая площадь, на которой реализуется проект, кв.м", max_digits = 20, decimal_places = 2, blank = True, null = True)
+    populationLocality = models.PositiveBigIntegerField(verbose_name = u"Численность населения на 1 января года подачи заявки в населенном (-ых) пункте (-ах), в котором реализуется проект, чел.", blank = True, null = True)
+    countMonth = models.PositiveIntegerField(verbose_name = u"Продолжительность реализации проекта,  количество месяцев (до 31 декабря года, в котором получена субсидия)", blank = True, null = True)
+    dateStartPlane = models.DateField(verbose_name = u"Планируемая дата начала реализации проекта", blank = True, null = True)
+    dateEndPlane = models.DateField(verbose_name = u"Планируемая дата окончания реализации проекта", blank = True, null = True)
+    initiativeGroup = models.TextField(verbose_name = u"Описание состава инициативной группы", blank = True, null = True)
+    generalCost = models.DecimalField(verbose_name = u"Общие расходы по проекту, рублей:", max_digits = 15, decimal_places = 2)
+    stateSupport = models.DecimalField(verbose_name = u"За счет средств государственной поддержки (федерального бюджета и бюджета Забайкальского края)", max_digits = 15, decimal_places = 3, blank = True, null = True)
+    localBudget = models.DecimalField(verbose_name = u"За счет средств местного бюджета", max_digits = 15, decimal_places = 3, blank = True, null = True)
+    offBudget = models.DecimalField(verbose_name = u"За счет средств внебюджетных источников (вклад граждан, юридических лиц, индивидуальных предпринимателей, общественных организаций)", max_digits = 15, decimal_places = 2, blank = True, null = True)
+    citizen = models.DecimalField(verbose_name = u"Вклад граждан, рублей", max_digits = 15, decimal_places = 2, blank = True, null = True)
+    citizenMoney = models.DecimalField(verbose_name = u"денежными средствами", max_digits = 15, decimal_places = 3, blank = True, null = True)
+    citizenWork = models.DecimalField(verbose_name = u"трудовым участием", max_digits = 15, decimal_places = 3, blank = True, null = True)
+    citizenRooms = models.DecimalField(verbose_name = u"предоставлением помещений", max_digits = 15, decimal_places = 3, blank = True, null = True)
+    citizenTechnical = models.DecimalField(verbose_name = u"предоставлением технических средств", max_digits = 15, decimal_places = 3, blank = True, null = True)
+    publicOrg = models.DecimalField(verbose_name = u"Вклад общественных, включая волонтерские, организаций, рублей", max_digits = 15, decimal_places = 2, blank = True, null = True)
+    publicOrgMoney = models.DecimalField(verbose_name = u"денежными средствами", max_digits = 15, decimal_places = 3, blank = True, null = True)
+    publicOrgWork = models.DecimalField(verbose_name = u"трудовым участием", max_digits = 15, decimal_places = 3, blank = True, null = True)
+    publicOrgRooms = models.DecimalField(verbose_name = u"предоставлением помещений", max_digits = 15, decimal_places = 3, blank = True, null = True)
+    publicOrgTechnical = models.DecimalField(verbose_name = u"предоставлением технических средств", max_digits = 15, decimal_places = 3, blank = True, null = True)
+    legalEntities = models.DecimalField(verbose_name = u"Вклад юридических лиц (индивидуальных предпринимателей), рублей", max_digits = 15, decimal_places = 2, blank = True, null = True)
+    legalEntitiesMoney = models.DecimalField(verbose_name = u"денежными средствами", max_digits = 15, decimal_places = 3, blank = True, null = True)
+    legalEntitiesWork = models.DecimalField(verbose_name = u"трудовым участием", max_digits = 15, decimal_places = 3, blank = True, null = True)
+    legalEntitiesRooms = models.DecimalField(verbose_name = u"предоставлением помещений", max_digits = 15, decimal_places = 3, blank = True, null = True)
+    legalEntitiesTechnical = models.DecimalField(verbose_name = u"предоставлением технических средств", max_digits = 15, decimal_places = 3, blank = True, null = True)
+    created = models.DateTimeField(verbose_name = u"Создано", auto_now_add = True)
     file = models.FileField(upload_to = '', blank = True, null = True)
 
     class Meta:
@@ -98,11 +99,10 @@ class Passports(models.Model):
     get_total_points.admin_order_field = 'nameProject'
     
     def file_link(self):
-        if self.file:
-            return format_html("<a href='%s'>Скачать</a>" % (self.file.url,))
+        if not self.file or not os.path.exists('media/passports/Passport №' + str(self.id) + '.xlsx'):
+            return 'Файл не существует'
         else:
-            return "Файл не существует"
-    file_link.allow_tags = True
+            return format_html("<a href='%s'>Скачать</a>" % (self.file.url,))
     file_link.short_description = 'Скачать паспорт проекта'
     
 
