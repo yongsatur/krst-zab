@@ -47,4 +47,4 @@ krst-zab/
 
 ## Лицензия
 
-Распространяется под лицензией [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE).
+Распространяется под лицензией [![License](https://img.shields.io/badge/License-All%20Rights%20Reserved-red.svg)](LICENSE).
