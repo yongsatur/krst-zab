@@ -2,7 +2,6 @@
 
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
 [![Django](https://img.shields.io/badge/Django-4.x-092E20?logo=django)](https://www.djangoproject.com/)
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 Это веб-приложение, разработанное по заказу для **Министерства сельского хозяйства Забайкальского края**. 
 Платформа предназначена для управления проектами и данными в сфере агропромышленного комплекса региона.
