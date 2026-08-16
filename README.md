@@ -18,7 +18,7 @@
 ## Технологический стек
 
 - **Backend:** язык программирования Python, фреймворк Django;
-- **База данных:** SQLite;
+- **База данных:** MySQL;
 - **Frontend:** HTML5, CSS, JavaScript.
 
 ---
